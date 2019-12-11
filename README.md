@@ -1,13 +1,14 @@
 # WeRaftNRoll Python 3.7
 A implementation of Raft using Python that handles the situation of Leader Flip-Flopping.
+Information stored as pairs(variable_name, variable_value).
 
 # How to run server
 Currently, there are three servers, more servers can be added by making changes to 'ip_list.txt'.
 One can initialize a server using its index in 'ip_list,=.txt'.
 ```
-python3 server.py 0 ip_list.txt
-python3 server.py 1 ip_list.txt
-python3 server.py 2 ip_list.txt
+python3 server.py ip_list.txt 0
+python3 server.py ip_list.txt 1
+python3 server.py ip_list.txt 2
 ```
 
 ## How to run client
