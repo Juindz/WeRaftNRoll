@@ -1,3 +1,6 @@
+import flask
+import sys
+from .servers import raftNode
 # initialized 
 if __name__ == '__main__':
     print( "python3 server.py <index> <txtfile>")
