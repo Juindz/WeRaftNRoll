@@ -32,7 +32,7 @@ class Client(object):
 
     # method ran after sending a request.
     # used to receive a response from servers
-    def receive(self):
+    def receive_leader_info(self):
         context = zmq.Context()
         socket = context.socket(zmq.SUB)
 
