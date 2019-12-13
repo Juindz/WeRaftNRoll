@@ -15,8 +15,8 @@ class Client(object):
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
         socket.connect("tcp://%s" % leader_info)
-        socket.send(message)
-        message = socket.recv()
+        socket.send_string(message)
+        message = socket.recv_string()
         print(message)
 
     # For finding who the leader is
@@ -24,9 +24,9 @@ class Client(object):
         context = zmq.Context()
         socket = context.socket(zmq.PUB)
         socket.bind("tcp://*:%d" % self.port)
-        topic = 1
+        topic = "1"
         message = "Find Leader"
-        socket.send("%d|%s" % (topic, message))
+        socket.send_string("%d|%s" % (topic, message))
         leader_info = self.receive()
         return leader_info
 
@@ -47,9 +47,9 @@ class Client(object):
         for ip in ips:
             socket.connect("tcp://%s" % ip)
         # topic_filter = 2 means response from leader telling client they are leader
-        topic_filter = 2
-        socket.setsockopt(zmq.SUBSCRIBE, topic_filter)
-        message = socket.recv()
+        topic_filter = "2"
+        socket.setsockopt_string(zmq.SUBSCRIBE, topic_filter)
+        message = socket.recv_string()
         message_data = message.split('|')[1]    # to get message content (message = topic|message_data)
         return message_data
 
