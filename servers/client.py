@@ -41,7 +41,7 @@ class Client(object):
         with open(self.file) as f:
             for ip in f:
                 # Remove http:// from the beginning of the ips
-                ip.append(ip.strip(' http://'))
+                ips.append(ip.strip(' http://'))
 
         # connect to all nodes and try to receive response message (only leader will send the response message)
         for ip in ips:
