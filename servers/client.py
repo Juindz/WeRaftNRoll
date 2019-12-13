@@ -52,3 +52,16 @@ class Client(object):
         message = socket.recv()
         message_data = message.split('|')[1]    # to get message content (message = topic|message_data)
         return message_data
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 4:
+        client_ip = sys.argv[1]
+        txt_file = sys.argv[2]
+        msg = sys.argv[3]
+        client_port = client_ip.split(':')[2]
+        c = Client(client_port, txt_file)
+        c.send(msg)
+    else:
+        print("python client.py client_ip_address ip_list.txt message")
+        print("client_ip_address format = http://ip:port")
