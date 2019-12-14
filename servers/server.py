@@ -230,18 +230,3 @@ if _name_ == "_main_":
                 neighbors.append(servers[i])
             server = ZeroMQServer(line, neighbors)
             servers.append(server)
-    #
-    # majority = (len(servers) // 2) + 1
-    #
-    # for i in range(len(servers)):
-    #     neighbors = []
-    #     for j in range(len(servers)):
-    #         if(i != j):
-    #             neighbors.append(servers[i])
-    #     servers[i].updateSubscribeThread(neighbors, majority)
-    # #
-    # # for server in servers:
-    # #     neighbors = []
-    # #     for i in range(len(servers)):
-    # #         neighbors.append(servers[i])
-    # #     server.updateSubscribeThread(majority)
