@@ -184,31 +184,34 @@ class Server(object):
 
 # Use zmq for the communication between servers.
 class ZeroMQServer(Server):
-    def __init__(self, address, neighbors):
+    def __init__(self, address, neighbors, port = 8000):
         super(ZeroMQServer, self).__init__(address, neighbors)
+        self.port = port
 
         class PublishThread(threading.Thread):
             def run(thread):
                 context = zmq.Context()
                 socket = context.socket(zmq.PUB)
-                socket.bind("tcp://127.0.0.1:%s" % self.address)
+                socket.bind("tcp://*:%d" % port)
 
                 while True:
                     message = self.messageBoard.get_message()
                     if not message:
-                        continue # sleep wait?
+                        continue
                     messageStr = pickle.dumps(message)
                     socket.send_string(messageStr)
 
         class SubscribeThread(threading.Thread):
             def run(thread):
+                context = zmq.Context()
+                socket = context.socket(zmq.SUB)
                 for neighbor in neighbors:
-                    context = zmq.Context()
-                    socket = context.socket(zmq.SUB)
-                    print(neighbor.address + str(socket))
-                    ip = "tcp://127.0.0.1:%d" % int(neighbor.address)
-                    socket.connect(ip)
-                    threading.Thread(target=self.subThreadFunction, args=(socket, )).start()
+                    socket.connect("tcp://%s:%d" % (int(neighbor.address), int(neighbor.port)))
+
+                while True:
+                    messageStrByte = socket.recv_string()
+                    message = pickle.loads(messageStrByte)
+                    self.on_message(message)
 
         self.subscribeThread = SubscribeThread()
         self.publishThread = PublishThread()
@@ -217,16 +220,7 @@ class ZeroMQServer(Server):
         self.publishThread.daemon = True
         self.publishThread.start()
 
-    def subThreadFunction(self, socket):
-        while True:
-            messageStrByte = socket.recv_string()
-            print("1fdsafewfdas")
-            print(messageStrByte)
-            message = pickle.loads(messageStrByte)
-            print(message)
-            self.on_message(message)
-
-if __name__ == "__main__":
+if _name_ == "_main_":
     file_path = "../ips"
     servers = []
     with open(file_path, "r") as file:
