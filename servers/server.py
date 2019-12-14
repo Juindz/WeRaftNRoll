@@ -77,7 +77,6 @@ class Server(object):
 
     # According to the state of the server, redirect to the specific method.
     def on_message(self, message):
-        print("enterServer")
         if message.term > self.currentTerm:
             self.currentTerm = message.term
         # Is the messages.term < ours? If so we need to tell
@@ -123,8 +122,6 @@ class Server(object):
     # change status to LEADER and start heartbeat as soon as we reach majority
     def increment_vote(self):
         self.voteCount += 1
-        s = self.address + " " + str(self.voteCount)
-        print(s)
         if self.voteCount >= self.majority:
             print("{self.address} becomes the leader of term {self.currentTerm}")
             self.votes = []
